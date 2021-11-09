@@ -1,28 +1,44 @@
 // All Connections laid bellow here.................
 
-const play = document.getElementById('play-btn')
+const playBtn = document.getElementById('play-btn')
 const textInput = document.getElementById('text')
 const pauseBtn = document.getElementById('pause-btn')
 const stopBtn = document.getElementById('stop-btn')
 const speed = document.getElementById('speed')
 
 
-// Globle variable lay here..........
-let utterance
+// Globle variable and function lay here..........
+let currentVarIndex
+let utterance =  new SpeechSynthesisUtterance(text)
+    
+    utterance.addEventListener('boundary',(e)=>{
+       currentVarIndex = e.charIndex
+    })
+    utterance.addEventListener('end',()=>{
+        textInput.disabled= false
+    })
+    
 
 
 
 
-// All Events lay bellow here...............
-play.addEventListener('click',()=>{
+// All Events Listening lay bellow here...............
+playBtn.addEventListener('click',()=>{
     playSpeech(textInput.value);
 })
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 pauseBtn.addEventListener('click',()=>{
-    pause();
+    pauseText();
 })
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 stopBtn.addEventListener('click',()=>{
-    stop()
+    stopSpeech()
+})
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+speed.addEventListener('click',()=>{
+    stopSpeech()
+    playSpeech(utterance.text.substring(currentVarIndex))
 })
 
 
@@ -30,22 +46,23 @@ stopBtn.addEventListener('click',()=>{
 
 // All function lay bellow here..............
 function playSpeech(text){
-    utterance =  new SpeechSynthesisUtterance(text)
+    if(speechSynthesis.paused && speechSynthesis.speaking){
+        return speechSynthesis.resume()
+    }
+    utterance.text = text;
     utterance.rate=speed.value || 1
-    utterance.addEventListener('end',()=>{
-        textInput.disabled= false
-    })
     textInput.disabled = true
     speechSynthesis.speak(utterance);
 }
-
-function pause(){
-    speechSynthesis.pause()
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+function pauseText(){
+if (speechSynthesis.speaking) speechSynthesis.pause()
 }
-
-function stop(){
-    textInput.value=""
-    speechSynthesis.cancel();
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+function stopSpeech(){
+    speechSynthesis.resume()
+    textInput.value = ""
+    speechSynthesis.cancel()
     
 }
 
