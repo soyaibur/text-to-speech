@@ -9,7 +9,7 @@ const speed = document.getElementById('speed')
 
 // Globle variable and function lay here..........
 let currentVarIndex
-let utterance =  new SpeechSynthesisUtterance(text)
+let utterance =  new SpeechSynthesisUtterance()
     
     utterance.addEventListener('boundary',(e)=>{
        currentVarIndex = e.charIndex
@@ -23,6 +23,7 @@ let utterance =  new SpeechSynthesisUtterance(text)
 
 
 // All Events Listening lay bellow here...............
+
 playBtn.addEventListener('click',()=>{
     playSpeech(textInput.value);
 })
@@ -36,7 +37,7 @@ stopBtn.addEventListener('click',()=>{
     stopSpeech()
 })
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-speed.addEventListener('click',()=>{
+speed.addEventListener('input',()=>{
     stopSpeech()
     playSpeech(utterance.text.substring(currentVarIndex))
 })
@@ -45,6 +46,7 @@ speed.addEventListener('click',()=>{
 
 
 // All function lay bellow here..............
+
 function playSpeech(text){
     if(speechSynthesis.paused && speechSynthesis.speaking){
         return speechSynthesis.resume()
@@ -65,17 +67,3 @@ function stopSpeech(){
     speechSynthesis.cancel()
     
 }
-
-
-
-
-//All code will be deleted here.............
-
-function printOut(text){
-    const div = document.createElement('div')
-    div.innerHTML = text
-    document.body.appendChild(div)
-}
-// addEventListener('click',()=>{
-//     alert("this is working")
-// })
