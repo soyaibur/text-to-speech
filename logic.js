@@ -67,3 +67,4 @@ function stopSpeech(){
     speechSynthesis.cancel()
     
 }
+
